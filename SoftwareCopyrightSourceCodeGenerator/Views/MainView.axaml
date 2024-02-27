@@ -1,0 +1,80 @@
+<UserControl
+    x:Class="SoftwareCopyrightSourceCodeGenerator.Views.MainView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:SoftwareCopyrightSourceCodeGenerator.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:MainViewModel"
+    IsEnabled="{Binding IsEnable}"
+    mc:Ignorable="d">
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+    <Grid
+        Margin="4"
+        ColumnDefinitions="*,4,*"
+        RowDefinitions="*,8,Auto">
+        <ListBox
+            Background="Transparent"
+            DragDrop.AllowDrop="True"
+            ItemsSource="{Binding Files}"
+            KeyDown="ListBox_KeyDown"
+            SelectionMode="Multiple" />
+        <TextBlock
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            IsVisible="{Binding Files, Converter={x:Static ObjectConverters.IsNull}}"
+            Text="将文件或目录拖放至此" />
+        <GridSplitter Grid.Column="1" />
+        <Grid
+            Grid.Column="2"
+            ColumnDefinitions="*,Auto,4,Auto"
+            RowDefinitions="*,4,Auto">
+            <TextBox
+                Grid.ColumnSpan="99"
+                BorderThickness="0"
+                IsReadOnly="True"
+                Text="{Binding Results}" />
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Text="{Binding LineCount, StringFormat='共{0}行'}" />
+            <Button
+                Grid.Row="2"
+                Grid.Column="3"
+                Background="Transparent"
+                Click="CopyButton_Click"
+                Content="复制" />
+        </Grid>
+
+        <Grid
+            Grid.Row="2"
+            ColumnDefinitions="*,8,Auto,8,Auto,8,Auto">
+            <TextBox Text="{Binding AddingFileOrFolder}" />
+            <Button
+                Grid.Column="2"
+                Command="{Binding AddFilesOrFolderCommand}"
+                Content="添加" />
+            <Button
+                Grid.Column="4"
+                Click="BrowseButton_Click"
+                Content="浏览文件.." />
+            <Button
+                Grid.Column="6"
+                Click="BrowseButton_Click"
+                Content="浏览目录.."
+                Tag="." />
+        </Grid>
+        <Button
+            Grid.Row="2"
+            Grid.Column="2"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
+            Command="{Binding GenerateCommand}"
+            Content="生成" />
+    </Grid>
+</UserControl>
